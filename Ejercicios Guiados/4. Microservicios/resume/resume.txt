@@ -1,0 +1,62 @@
+MICROSERVICIO FLASK CON MARIADB - DESARROLLO DE API REST
+
+Este proyecto representa un paso significativo en mi aprendizaje de arquitecturas de microservicios y desarrollo de APIs REST. A través de Google Cloud Platform (GCP), logré crear un microservicio completo que demuestra la integración entre diferentes tecnologías y la importancia de un diseño bien estructurado.
+
+DESARROLLO DEL MICROSERVICIO
+
+El microservicio fue desarrollado usando Flask como framework principal, aprovechando su simplicidad y flexibilidad para crear una API REST robusta. Implementé siete endpoints específicos que cubren todas las operaciones CRUD necesarias para la gestión de un catálogo de libros:
+
+- GET /api/books: Obtiene todos los libros disponibles
+- GET /api/books/{isbn}: Busca un libro específico por su ISBN
+- GET /api/books/format: Filtra libros por formato (físico o digital)
+- GET /api/books/author: Busca libros por autor
+- POST /api/books/create: Crea nuevos libros en el catálogo
+- PUT /api/books/update: Actualiza información de libros existentes
+- DELETE /api/books/delete: Elimina libros del sistema
+
+INTEGRACIÓN CON BASE DE DATOS
+
+Una de las partes más desafiantes fue diseñar y conectar la base de datos MariaDB. Decidí implementar una estructura normalizada con múltiples tablas para optimizar el almacenamiento y evitar redundancia:
+
+- Tabla 'autores': Almacena información de los escritores
+- Tabla 'géneros': Catálogo de géneros literarios disponibles
+- Tabla 'formatos': Tipos de formato (Libro de bolsillo, De tapa dura)
+- Tabla 'libros': Información principal de cada libro
+- Tabla 'book_authors': Relación muchos a muchos entre libros y autores
+- Vista 'catálogo_de_libros': Combina toda la información para consultas eficientes
+
+Esta normalización me permitió entender mejor cómo las bases de datos relacionales manejan las relaciones complejas y cómo optimizar las consultas para obtener mejor rendimiento.
+
+IMPLEMENTACIÓN DE XML
+
+Un aspecto técnico interesante fue la implementación de respuestas en formato XML. Aunque JSON es más común en APIs modernas, trabajar con XML me ayudó a entender la importancia de la interoperabilidad y cómo diferentes sistemas pueden comunicarse usando estándares establecidos. Utilicé xml.etree.ElementTree para generar respuestas estructuradas que siguen el formato del archivo catalogo_libros.xml existente.
+
+CONEXIÓN CON INTERFAZ
+
+El microservicio fue diseñado para ser consumido por interfaces web, lo que me permitió experimentar con la separación de responsabilidades entre backend y frontend. Aunque en este caso me enfoqué principalmente en el desarrollo del microservicio, la arquitectura permite que cualquier aplicación cliente consuma la API sin conocer los detalles internos de implementación.
+
+APRENDIZAJES CLAVE
+
+1. Arquitectura de Microservicios: Comprendí cómo los microservicios permiten escalabilidad y mantenimiento independiente de componentes.
+
+2. Normalización de Bases de Datos: Aprendí a diseñar esquemas de base de datos eficientes que evitan redundancia y mejoran la integridad de los datos.
+
+3. APIs REST: Dominé los principios de diseño de APIs RESTful, incluyendo el uso correcto de métodos HTTP y códigos de estado.
+
+4. Manejo de Errores: Implementé un sistema robusto de manejo de errores que proporciona respuestas consistentes y útiles.
+
+5. Documentación: Creé documentación completa que facilita el mantenimiento y la comprensión del código.
+
+6. Integración de Tecnologías: Experiencia práctica en conectar Flask, MariaDB, XML y sistemas de despliegue en la nube.
+
+CONCLUSIONES
+
+Este proyecto me demostró la importancia de pensar en sistemas completos, no solo en código individual. La integración entre Flask, MariaDB, XML y GCP me enseñó cómo las tecnologías modernas se complementan para crear soluciones robustas y escalables.
+
+La experiencia de trabajar con una base de datos normalizada me hizo apreciar la importancia del diseño de datos desde el inicio del proyecto. Cada decisión de diseño tiene implicaciones en el rendimiento, mantenibilidad y escalabilidad del sistema.
+
+El uso de XML, aunque menos común que JSON, me ayudó a entender la flexibilidad de los microservicios para adaptarse a diferentes necesidades de interoperabilidad. Esto es especialmente valioso en entornos empresariales donde diferentes sistemas pueden requerir diferentes formatos de datos.
+
+Finalmente, este proyecto reforzó mi comprensión de que el desarrollo de software moderno no es solo escribir código, sino diseñar sistemas que sean mantenibles, escalables y fáciles de entender. La documentación, las pruebas y la arquitectura son tan importantes como el código mismo.
+
+La experiencia con GCP me abrió los ojos a las posibilidades de la computación en la nube y cómo puede simplificar el despliegue y mantenimiento de aplicaciones complejas. Estoy emocionado de continuar explorando estas tecnologías y aplicarlas en proyectos más ambiciosos.

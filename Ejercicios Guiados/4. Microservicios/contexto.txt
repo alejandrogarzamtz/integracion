@@ -1,0 +1,6 @@
+aqui sube el codigo que esta en la carpeta code, son varias subcarpetas dentro de code, subelas
+sube las imagenes que estan en la subcarpeta media 
+sube la reflexion que esta eb resume, es un txt
+
+CONTEXTO:
+HICE UNA APP CON BASE DE DATOS, APP.PY Y UNA VISTA WEB EN GCP

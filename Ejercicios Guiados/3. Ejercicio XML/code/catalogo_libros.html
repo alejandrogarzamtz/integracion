@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catálogo de Libros</title>
+  <style>
+    body {
+      font-family: "Courier New", monospace;
+      background: #000;
+      color: #00ff00;
+      padding: 30px;
+    }
+
+    .catalog-title {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: #00ff00;
+      text-shadow: 0 0 10px #00ff00, 0 0 20px #ff00ff;
+    }
+
+    .search-bar {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .search-bar input {
+      padding: 10px;
+      font-size: 1rem;
+      border: 1px solid #00ff00;
+      border-radius: 5px;
+      width: 250px;
+      background: #111;
+      color: #00ff00;
+    }
+
+    .books-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .book-card {
+      background: #111;
+      border: 1px solid #00ff00;
+      border-radius: 8px;
+      padding: 15px;
+      box-shadow: 0 0 15px rgba(0,255,0,0.4);
+    }
+
+    .book-title {
+      font-size: 1.4rem;
+      font-weight: bold;
+      color: #ffea00;
+      margin-bottom: 8px;
+    }
+
+    .book-author {
+      font-style: italic;
+      color: #33ff33;
+      margin-bottom: 10px;
+    }
+
+    .book-details {
+      font-size: 0.9rem;
+      margin-bottom: 12px;
+    }
+
+    .book-detail-label {
+      font-weight: bold;
+      color: #ff00ff;
+    }
+
+    .price {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #00ffcc;
+    }
+
+    .stock.low { color: #ff3333; font-weight: bold; }
+    .stock.medium { color: #ffaa00; font-weight: bold; }
+    .stock.high { color: #33ff66; font-weight: bold; }
+
+    .format-badge {
+      display: inline-block;
+      margin-bottom: 8px;
+      padding: 4px 8px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      color: #fff;
+    }
+
+    .format-fisico { background: #ff00ff; }
+    .format-digital { background: #00ccff; }
+
+    .isbn {
+      font-size: 0.75rem;
+      margin-top: 8px;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+  <div class="catalog">
+    <h1 class="catalog-title">Catálogo de Libros</h1>
+
+    <!-- Barra de búsqueda -->
+    <div class="search-bar">
+      <input type="text" id="isbnInput" placeholder="Buscar por ISBN..." oninput="filterByISBN()">
+    </div>
+
+    <div class="books-grid" id="booksGrid">
+      <!-- Libros se cargan desde XML -->
+    </div>
+  </div>
+
+  <script>
+    let allBooks = [];
+
+    async function loadBooks() {
+      try {
+        const response = await fetch('catalogo_libros.xml');
+        const xmlText = await response.text();
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
+        const books = Array.from(xmlDoc.getElementsByTagName('book'));
+        allBooks = books;
+        renderBooks(allBooks);
+      } catch (err) {
+        console.error('Error al cargar XML:', err);
+        document.getElementById('booksGrid').innerHTML =
+          '<p style="color: #ff3333; text-align: center;">Error al cargar catálogo</p>';
+      }
+    }
+
+    function renderBooks(books) {
+      const booksGrid = document.getElementById('booksGrid');
+      booksGrid.innerHTML = "";
+      if (books.length === 0) {
+        booksGrid.innerHTML = '<p style="color: #ff3333; text-align: center;">No se encontraron libros</p>';
+        return;
+      }
+      books.forEach(book => {
+        const card = createBookCard(book);
+        booksGrid.appendChild(card);
+      });
+    }
+
+    function createBookCard(book) {
+      const card = document.createElement('div');
+      card.className = 'book-card';
+
+      const title = book.getElementsByTagName('title')[0].textContent;
+      const author = book.getElementsByTagName('author')[0].textContent;
+      const year = book.getElementsByTagName('year')[0].textContent;
+      const genre = book.getElementsByTagName('genre')[0].textContent;
+      const price = book.getElementsByTagName('price')[0].textContent;
+      const stock = parseInt(book.getElementsByTagName('stock')[0].textContent);
+      const format = book.getElementsByTagName('format')[0].textContent;
+      const isbn = book.getAttribute('isbn');
+
+      let stockClass = 'high';
+      if (stock <= 15) stockClass = 'low';
+      else if (stock <= 30) stockClass = 'medium';
+
+      let formatClass = format === 'Físico' ? 'format-fisico' : 'format-digital';
+
+      card.innerHTML = `
+        <div class="format-badge ${formatClass}">${format}</div>
+        <h2 class="book-title">${title}</h2>
+        <p class="book-author">${author}</p>
+        <div class="book-details">
+          <span class="book-detail-label">Año:</span> ${year} <br>
+          <span class="book-detail-label">Género:</span> ${genre}
+        </div>
+        <div class="price">€${price}</div>
+        <div class="stock ${stockClass}">Stock: ${stock}</div>
+        <div class="isbn">ISBN: ${isbn}</div>
+      `;
+      return card;
+    }
+
+    function filterByISBN() {
+      const query = document.getElementById('isbnInput').value.trim();
+      if (!query) {
+        renderBooks(allBooks);
+        return;
+      }
+      const filtered = allBooks.filter(book => {
+        const isbn = book.getAttribute('isbn');
+        return isbn.includes(query);
+      });
+      renderBooks(filtered);
+    }
+
+    document.addEventListener('DOMContentLoaded', loadBooks);
+  </script>
+</body>
+</html>

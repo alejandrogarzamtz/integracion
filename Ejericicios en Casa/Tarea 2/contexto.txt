@@ -1,0 +1,4 @@
+SUBE EL TXT DE Resume
+Tarea 2: Miniensayo (600 palabras)
+● Tema: “¿Cloud-native o Cloud-enabled? Análisis de una app real.”
+● Usa referencias bibliográficas actuales (IEEE, ACM, blogs técnicos confiables)

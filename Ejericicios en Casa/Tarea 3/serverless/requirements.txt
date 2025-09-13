@@ -1,0 +1,34 @@
+# Dependencias para las funciones Lambda de la aplicación de banca móvil
+
+# AWS SDK
+boto3==1.34.0
+botocore==1.34.0
+
+# Utilidades de AWS
+aws-xray-sdk==2.12.0
+aws-lambda-powertools==2.12.0
+
+# Manejo de datos
+pydantic==2.5.0
+python-dateutil==2.8.2
+
+# Validación y serialización
+jsonschema==4.20.0
+marshmallow==3.20.1
+
+# Utilidades de Python
+python-dotenv==1.0.0
+cryptography==41.0.8
+
+# Logging y monitoreo
+structlog==23.2.0
+
+# Testing (solo para desarrollo)
+pytest==7.4.3
+pytest-cov==4.1.0
+moto==4.2.14
+
+# Herramientas de desarrollo
+black==23.11.0
+flake8==6.1.0
+mypy==1.7.1

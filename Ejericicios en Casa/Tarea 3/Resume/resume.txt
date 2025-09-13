@@ -1,0 +1,113 @@
+# Reflexión Personal: Diseño de Arquitectura Cloud para Banca Móvil
+
+## ¿Qué aprendí realmente?
+
+Cuando me pidieron diseñar una arquitectura cloud para una aplicación de banca móvil usando nube híbrida y funciones serverless, al principio pensé "bueno, esto suena complicado pero interesante". La verdad es que no tenía idea de lo profundo que iba a ser este proyecto. Pensé que sería como hacer una aplicación web normal, pero con más servicios de AWS. Qué equivocado estaba.
+
+Lo primero que me llamó la atención fue entender qué significa realmente una "nube híbrida". No es solo usar AWS y ya, sino combinar lo mejor de ambos mundos: la escalabilidad de la nube pública con el control y seguridad de una infraestructura privada. Es como tener tu casa (datos sensibles) en un barrio seguro, pero usar servicios públicos (funciones serverless) cuando los necesitas. La analogía que más me ayudó a entenderlo fue pensar en un hospital: tienes áreas públicas donde cualquiera puede entrar (como la recepción), pero también tienes áreas privadas y seguras (como el quirófano) donde solo personal autorizado puede acceder.
+
+Al principio me costó mucho entender por qué no simplemente poner todo en AWS. Después de todo, es confiable, escalable y tiene todos los servicios que necesitas. Pero cuando empecé a investigar sobre compliance bancario y regulaciones como PCI DSS, me di cuenta de que a veces necesitas tener control total sobre ciertos aspectos de tu infraestructura. Especialmente cuando hablas de datos financieros sensibles.
+
+## Los desafíos reales
+
+El mayor reto fue pensar como un banco real. No es solo hacer que funcione, sino que sea seguro, cumpla regulaciones y pueda manejar millones de transacciones sin romperse. Me di cuenta de que en el mundo real, cada decisión técnica tiene implicaciones legales, de seguridad y de negocio. Es como la diferencia entre hacer una aplicación para compartir fotos y hacer una aplicación que maneja el dinero de las personas.
+
+Por ejemplo, cuando diseñé las funciones Lambda para autenticación, no solo tenía que hacer que el login funcionara, sino pensar en cosas como: ¿qué pasa si alguien intenta hackear? ¿Cómo registro cada intento de acceso? ¿Cómo manejo los tokens de sesión de forma segura? ¿Qué pasa si alguien intenta hacer login desde un país diferente al habitual? ¿Cómo detecto comportamientos sospechosos? Es increíble cómo algo que parece simple (un login) se vuelve súper complejo cuando hablamos de dinero real.
+
+Uno de los momentos más reveladores fue cuando me di cuenta de que no podía simplemente usar contraseñas simples. En un banco, necesitas autenticación multifactor, políticas de contraseñas estrictas, detección de intentos de fuerza bruta, y un montón de otras cosas que nunca había considerado antes. Es como la diferencia entre tener una cerradura normal en tu casa y tener un sistema de seguridad bancario con múltiples capas de protección.
+
+También me di cuenta de que la escalabilidad no es solo sobre manejar más usuarios, sino sobre manejar más usuarios de forma segura. No puedes simplemente agregar más servidores y ya. Necesitas pensar en cómo mantener la seguridad, cómo distribuir la carga de forma que no comprometa la integridad de los datos, y cómo asegurarte de que cada transacción sea procesada correctamente sin importar cuántas personas estén usando el sistema al mismo tiempo.
+
+## La parte técnica que más me gustó
+
+Definitivamente fue trabajar con Terraform. Es fascinante cómo puedes describir toda tu infraestructura como código. Es como tener una receta que puedes seguir para crear exactamente el mismo ambiente una y otra vez. Si algo se rompe, puedes destruir todo y recrearlo desde cero. Es como tener un botón de "reset" para tu infraestructura completa. La primera vez que ejecuté `terraform apply` y vi cómo se creaban todos los recursos automáticamente, me sentí como un mago.
+
+Lo que más me impresionó de Terraform fue cómo maneja las dependencias entre recursos. No tienes que preocuparte por crear las cosas en el orden correcto, Terraform lo hace por ti. Es como tener un asistente que sabe exactamente qué necesita hacer primero para que todo funcione correctamente.
+
+También me encantó cómo funciona el patrón de cache con DynamoDB y Aurora PostgreSQL. La idea de tener datos rápidos en DynamoDB para consultas frecuentes (como el balance de una cuenta) y datos críticos en PostgreSQL para transacciones importantes es brillante. Es como tener una libreta de notas rápida para cosas que necesitas recordar al instante, y un archivo formal para documentos importantes.
+
+Lo que más me sorprendió fue descubrir que DynamoDB no es solo una base de datos NoSQL, sino que está diseñada específicamente para aplicaciones que necesitan alta disponibilidad y baja latencia. Cuando leí sobre cómo maneja la distribución de datos automáticamente y cómo puede escalar hasta millones de requests por segundo, me di cuenta de que estaba trabajando con tecnología realmente avanzada.
+
+También me fascinó cómo funciona Aurora PostgreSQL. La idea de que puede hacer backup continuo y recuperación point-in-time automáticamente, y que puede escalar el almacenamiento hasta 128TB sin downtime, es increíble. Es como tener una base de datos que se mantiene a sí misma.
+
+## Lo que me sorprendió
+
+Lo que más me sorprendió fue darme cuenta de que la tecnología es solo una parte del problema. La mayor parte del trabajo fue pensar en compliance, auditoría y seguridad. Cosas como PCI DSS, SOX, GDPR... al principio pensé "esto es aburrido", pero luego entendí que son las reglas que mantienen el sistema financiero funcionando de forma confiable. Es como descubrir que detrás de cada aplicación bancaria que usas hay un montón de regulaciones y controles que aseguran que tu dinero esté seguro.
+
+Cuando empecé a leer sobre PCI DSS, me di cuenta de que no es solo una lista de cosas que hacer, sino un framework completo para proteger datos de tarjetas de crédito. Cada requisito tiene una razón específica, y cuando los entiendes todos juntos, forman un sistema de seguridad realmente robusto. Es como armar un rompecabezas donde cada pieza es importante para que la imagen completa tenga sentido.
+
+También me sorprendió lo importante que es el monitoreo. En un sistema bancario, no puedes darte el lujo de que algo falle sin saberlo. Necesitas saber exactamente qué está pasando en cada momento, quién está haciendo qué, y si algo se ve sospechoso. Es como tener cámaras de seguridad en cada esquina de tu casa, pero también tener un sistema que analiza automáticamente las grabaciones para detectar comportamientos inusuales.
+
+Lo que más me impactó fue darme cuenta de que en el mundo real, un error en un sistema bancario no es solo un bug que puedes arreglar después. Puede significar que alguien pierda dinero, que se comprometa la seguridad de miles de usuarios, o que el banco tenga que pagar multas millonarias por no cumplir regulaciones. Es una responsabilidad enorme que nunca había considerado antes.
+
+También me sorprendió descubrir que la mayoría de los ataques a sistemas bancarios no son hackeos súper sofisticados, sino cosas como phishing, ingeniería social, o explotación de vulnerabilidades conocidas que no se han parcheado. Es como descubrir que la mayoría de los robos no son asaltos elaborados, sino gente que aprovecha que dejaste la puerta abierta.
+
+## Los errores que cometí (y aprendí de ellos)
+
+Al principio, traté de hacer todo perfecto desde el primer intento. Error. Me di cuenta de que es mejor empezar simple y luego ir agregando complejidad. Primero hice que las funciones básicas funcionaran, luego agregué seguridad, después monitoreo, y finalmente optimizaciones. Es como construir una casa: no puedes empezar con los acabados de lujo si no tienes una base sólida.
+
+Uno de mis errores más grandes fue tratar de implementar todas las características de seguridad desde el principio. Me pasé días configurando autenticación multifactor, encriptación avanzada, y sistemas de detección de intrusos, cuando debería haber empezado con un login básico que funcionara. Me di cuenta de que es mejor tener algo que funcione y sea seguro básicamente, que algo súper seguro que no funcione.
+
+También al principio no pensé mucho en los costos. Cuando vi que Aurora Serverless puede costar $200 al mes solo por estar ahí, me di cuenta de que cada decisión técnica tiene un impacto económico real. No puedes simplemente usar el servicio más caro porque sea "mejor". Es como comprar un auto: no necesitas un Ferrari para ir al supermercado.
+
+Otro error que cometí fue no pensar en la experiencia del usuario desde el principio. Me enfoqué tanto en la arquitectura técnica que olvidé que al final, personas reales van a usar esta aplicación. Cuando me di cuenta de que había diseñado un sistema súper seguro pero súper complicado de usar, tuve que repensar muchas cosas. Es como diseñar una casa súper segura pero donde es imposible abrir las puertas.
+
+También me di cuenta de que no había pensado en el mantenimiento a largo plazo. Diseñé un sistema que funcionaba perfectamente en el papel, pero que sería un dolor de cabeza mantener en el mundo real. Es como diseñar un auto que solo un mecánico súper especializado puede arreglar: puede ser genial, pero no es práctico.
+
+## Lo que realmente significa "serverless"
+
+Antes de este proyecto, pensaba que serverless era solo "no tener que manejar servidores". Pero ahora entiendo que es mucho más profundo. Es sobre pagar solo por lo que usas, escalar automáticamente, y enfocarte en el código de negocio en lugar de la infraestructura. Es como descubrir que hay una diferencia enorme entre "no tener servidores" y "no tener que preocuparte por servidores".
+
+Es como la diferencia entre tener tu propio auto (servidor tradicional) y usar Uber (serverless). Con tu auto tienes que preocuparte por gasolina, mantenimiento, seguro, estacionamiento, y qué pasa si se rompe. Con Uber solo pagas por el viaje que haces y ellos se encargan de todo lo demás. Pero la analogía que más me ayudó a entenderlo fue pensar en la electricidad: no necesitas tener tu propia planta de energía, solo conectas tus electrodomésticos y pagas por la electricidad que usas.
+
+Lo que más me impresionó fue darme cuenta de que serverless no es solo sobre ahorrar dinero (aunque eso es parte importante), sino sobre velocidad de desarrollo. Cuando no tienes que preocuparte por configurar servidores, instalar software, manejar actualizaciones, o monitorear el hardware, puedes enfocarte completamente en resolver el problema de negocio. Es como la diferencia entre ser un chef que también tiene que ser agricultor, ganadero, y distribuidor, versus ser un chef que solo cocina.
+
+También me di cuenta de que serverless cambia completamente cómo piensas sobre el código. En lugar de escribir una aplicación monolítica que corre en un servidor, escribes funciones pequeñas y específicas que se ejecutan solo cuando las necesitas. Es como la diferencia entre tener una fábrica que produce todo tipo de productos versus tener talleres especializados que solo hacen una cosa pero la hacen perfecta.
+
+Pero también aprendí que serverless no es la solución para todo. Hay casos donde necesitas control total sobre el servidor, o donde el costo de serverless puede ser más alto que tener tu propio servidor. Es como descubrir que aunque Uber es genial para la mayoría de viajes, a veces necesitas tu propio auto para viajes largos o para llevar cosas grandes.
+
+## La parte humana del desarrollo
+
+Lo que más me gustó de este proyecto fue darme cuenta de que detrás de cada línea de código hay personas reales que van a usar este sistema. Cuando diseñé la función de transferencias, pensé en alguien enviando dinero a su familia en otro país. Cuando diseñé el sistema de notificaciones, pensé en alguien recibiendo una alerta de que su cuenta fue comprometida. Es como la diferencia entre diseñar un juguete para ti mismo versus diseñar un juguete que van a usar niños reales.
+
+Es fácil perderse en la tecnología y olvidar que estás construyendo algo que va a impactar la vida de las personas. Cada decisión técnica que tomé tiene consecuencias reales para usuarios reales. Por ejemplo, cuando decidí usar autenticación multifactor, no solo estaba implementando una característica de seguridad, estaba protegiendo el dinero de personas que confían en el sistema.
+
+Una de las cosas que más me impactó fue pensar en los casos extremos. ¿Qué pasa si alguien está en una emergencia y necesita acceder a su cuenta pero no tiene su teléfono para el código de autenticación? ¿Qué pasa si alguien está viajando y el sistema detecta su ubicación como sospechosa? ¿Qué pasa si alguien tiene una discapacidad y no puede usar ciertas interfaces? Estas preguntas me hicieron darme cuenta de que diseñar software no es solo sobre hacer que funcione, sino sobre hacer que funcione para todos.
+
+También me di cuenta de que la accesibilidad no es solo sobre personas con discapacidades, sino sobre hacer que el sistema sea fácil de usar para todos. Una persona mayor que no está familiarizada con tecnología, alguien que está estresado porque necesita dinero urgente, o alguien que está usando el sistema en un idioma que no es su lengua materna. Todos estos usuarios necesitan que el sistema sea intuitivo y confiable.
+
+Lo que más me conmovió fue darme cuenta de que cada transacción que procesa el sistema representa una decisión importante en la vida de alguien. Puede ser alguien pagando su renta, enviando dinero a su familia, ahorrando para la universidad de sus hijos, o simplemente comprando algo que necesita. Cada línea de código que escribí tiene el potencial de hacer que estas transacciones sean más seguras, más rápidas, o más confiables.
+
+## Lo que cambiaría si lo hiciera de nuevo
+
+Definitivamente empezaría con más pruebas. Al principio me enfoqué tanto en hacer que funcionara que no pensé mucho en qué pasaría si algo fallaba. En un sistema bancario, necesitas probar todos los escenarios posibles: qué pasa si la base de datos se cae, qué pasa si hay un ataque DDoS, qué pasa si alguien intenta transferir más dinero del que tiene. Es como la diferencia entre aprender a manejar solo en días soleados versus aprender a manejar en lluvia, nieve, y condiciones extremas.
+
+También habría empezado con un diseño más simple. Traté de implementar todas las características de una vez, cuando hubiera sido mejor empezar con lo básico y luego ir agregando funcionalidades. Es como tratar de construir una casa completa en un día versus construirla habitación por habitación.
+
+Una cosa que definitivamente haría diferente es involucrar a usuarios reales desde el principio. Me pasé tanto tiempo diseñando la arquitectura técnica que olvidé que al final, personas reales van a usar esta aplicación. Habría creado prototipos simples y los habría mostrado a amigos y familiares para ver si realmente eran fáciles de usar. Es como la diferencia entre diseñar un auto solo basándote en especificaciones técnicas versus diseñarlo basándote en cómo la gente realmente maneja.
+
+También habría pensado más en el mantenimiento a largo plazo. Diseñé un sistema que funcionaba perfectamente en el papel, pero que sería un dolor de cabeza mantener en el mundo real. Habría diseñado con la mentalidad de que alguien más (posiblemente menos experimentado) va a tener que mantener este código en el futuro. Es como la diferencia entre escribir código que solo tú entiendes versus escribir código que cualquier desarrollador puede entender y modificar.
+
+Otra cosa que cambiaría es que habría empezado con un presupuesto realista desde el principio. Me enfoqué tanto en hacer que el sistema fuera perfecto que no pensé en si sería económicamente viable. En el mundo real, cada decisión técnica tiene un costo, y necesitas encontrar el balance entre funcionalidad, seguridad, y costo. Es como la diferencia entre diseñar tu casa ideal sin pensar en el presupuesto versus diseñar la mejor casa posible dentro de tu presupuesto.
+
+## El valor real de este proyecto
+
+Más allá de aprender sobre AWS y Terraform, este proyecto me enseñó a pensar como un arquitecto de sistemas real. No es solo sobre hacer que el código funcione, sino sobre diseñar algo que sea mantenible, escalable, seguro y económico. Es como la diferencia entre ser un mecánico que arregla autos versus ser un ingeniero que diseña autos.
+
+Me di cuenta de que la arquitectura de software es como diseñar una ciudad. No puedes solo construir casas bonitas, necesitas pensar en carreteras, servicios públicos, seguridad, y cómo todo va a crecer en el futuro. También necesitas pensar en qué pasa cuando hay un terremoto (fallas del sistema), cuando llueve mucho (alto tráfico), o cuando hay una emergencia (ataques de seguridad).
+
+Lo que más valor le doy a este proyecto es que me enseñó a pensar en sistemas, no solo en código. Aprendí que cada decisión técnica tiene implicaciones que van más allá de la funcionalidad inmediata. Por ejemplo, cuando decidí usar DynamoDB para cache, no solo estaba eligiendo una base de datos, estaba eligiendo un patrón de arquitectura que afectaría cómo el sistema escala, cómo se comporta bajo carga, y cómo se puede mantener en el futuro.
+
+También me enseñó la importancia de la documentación. Al principio pensé que documentar era una pérdida de tiempo, pero cuando tuve que explicar mi arquitectura a otros, me di cuenta de que la documentación no es solo para otros, sino para ti mismo en el futuro. Es como escribir un diario: al principio parece innecesario, pero cuando vuelves a leerlo meses después, te das cuenta de por qué tomaste ciertas decisiones.
+
+## Reflexión final
+
+Este proyecto me hizo darme cuenta de que la tecnología es solo una herramienta. Lo importante es entender el problema que estás tratando de resolver y usar la tecnología apropiada para resolverlo. No se trata de usar la tecnología más nueva o más cool, sino de usar la que mejor se adapte a las necesidades reales. Es como la diferencia entre usar un martillo para clavar un tornillo versus usar un destornillador: la herramienta correcta hace toda la diferencia.
+
+También aprendí que en el mundo real, la perfección es el enemigo del progreso. Es mejor tener algo que funcione y se pueda mejorar, que algo perfecto que nunca se termine. Es como la diferencia entre tener un auto que funciona pero necesita ajustes menores versus tener un auto perfecto que nunca terminas de construir.
+
+Al final, este proyecto me enseñó que ser un desarrollador no es solo sobre escribir código, sino sobre resolver problemas reales para personas reales, usando las mejores herramientas disponibles, de la forma más eficiente y segura posible. Es sobre entender que cada línea de código que escribes tiene el potencial de impactar la vida de alguien, para bien o para mal.
+
+Y eso, creo, es lo que realmente significa ser un profesional en tecnología. No es solo sobre saber usar las herramientas, sino sobre entender cuándo usarlas, por qué usarlas, y cómo usarlas de manera responsable. Es sobre reconocer que la tecnología es un medio para un fin, no un fin en sí mismo.
+
+Este proyecto me cambió la perspectiva sobre lo que significa ser un desarrollador. Ya no veo el código como algo abstracto, sino como algo que tiene consecuencias reales en el mundo real. Y eso, creo, es la diferencia entre ser un programador y ser un profesional de la tecnología.

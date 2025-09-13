@@ -1,0 +1,1 @@
+Busco una plataforma completa para el desarrollo y despliegue de aplicaciones web. Necesito herramientas de build automatizado, testing integrado, deployment continuo y monitoreo en tiempo real. La plataforma debe incluir runtime para múltiples lenguajes, middleware para APIs, base de datos gestionada y pipeline de CI/CD.

@@ -1,0 +1,7 @@
+La aplicación desarrollada tiene como base Flask, un framework ligero de Python que facilita la construcción de aplicaciones web de manera rápida y organizada. A través de Flask se implementó la lógica que permite manejar rutas, procesar solicitudes y devolver respuestas en formato JSON, lo cual la convierte en una interfaz clara entre el usuario y los modelos de inteligencia artificial que corren en segundo plano.
+
+El proyecto se conecta con Ollama, un servidor local que funciona como puente para interactuar con distintos modelos de lenguaje, entre ellos Llama y DeepSeek. Gracias a esta integración, la aplicación puede ofrecer un entorno en el que el usuario escribe un mensaje y recibe una respuesta generada por IA, sin necesidad de depender de servicios externos en la nube. En este sentido, se aprovechan lenguajes y modelos locales, lo que mejora tanto la privacidad como el control del despliegue.
+
+La comunicación se logra mediante endpoints de la API de Ollama (/chat, /generate, /tags), que permiten enviar prompts, mantener conversaciones o consultar los modelos disponibles. La aplicación Flask actúa como capa intermedia, gestionando errores, formateando respuestas y ofreciendo una estructura sencilla para que el frontend se conecte de manera intuitiva.
+
+En resumen, se trata de un proyecto que demuestra cómo unir Flask, Ollama y modelos de IA locales como DeepSeek o Llama, para crear una plataforma conversacional práctica, escalable y controlada directamente desde el entorno del usuario.

@@ -1,0 +1,26 @@
+sube el codigo dentro de las subcarpetas de code
+sube las fotos que estan en media
+sube la reflexion que esta en rsume, es un txt
+
+CONTEXTO:
+En nuestra aplicación web interactúa con el modelo LLM (Ollama) a través
+de una API. Comprender cómo se diseñan e implementan diferentes
+arquitecturas de API es fundamental para integrar modelos de IA, servicios
+de datos y microservicios en aplicaciones modernas.
+• La API de Ollama es un ejemplo de API REST. Haremos peticiones HTTP POST
+al endpoint /api/chat para obtener respuestas del modelo de lenguaje. Nuestro
+backend Flask también expone una API RESTful para que el frontend envíe
+preguntas.
+• Si tuviéramos una aplicación que requiere datos complejos (por ejemplo, pedir
+resultados de diferentes modelos IA y combinarlos), podrías usar GraphQL para
+optimizar y estructurar esas consultas.
+• No se utiliza SOAP en el ejercicio, pero es importante conocerlo si en algún
+momento necesitas integrar tu aplicación con sistemas empresariales antiguos o
+servicios financieros que lo utilicen.
+• Si decidimos escalar nuestra arquitectura y nuestro backend se dividiera en
+microservicios (por ejemplo, procesamiento de texto, análisis de sentimientos,
+logging, etc.), podrías usar gRPC para una comunicación eficiente entre ellos.
+• Nuestra aplicación usa REST (pregunta-respuesta), pero si quisiéramos hacer un
+chat en tiempo real o streaming de respuestas del modelo LLM (como hace
+ChatGPT), podríamos implementar WebSockets para que la respuesta se muestre
+conforme el modelo va generando el texto.

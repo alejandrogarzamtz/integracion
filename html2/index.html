@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integración de Aplicaciones Web - Alejandro Garza Martínez</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-code"></i>
+                    <h1>Integración de Aplicaciones Web</h1>
+                </div>
+                <div class="student-info">
+                    <div class="info-item">
+                        <i class="fas fa-user"></i>
+                        <span>Alejandro Garza Martínez</span>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-id-card"></i>
+                        <span>597187</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="navigation">
+        <div class="container">
+            <ul class="nav-list">
+                <li><a href="#ejercicios-guiados" class="nav-link active">Ejercicios Guiados</a></li>
+                <li><a href="#ejercicios-casa" class="nav-link">Ejercicios en Casa</a></li>
+                <li><a href="#proyecto-final" class="nav-link">Proyecto Final</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Ejercicios Guiados Section -->
+        <section id="ejercicios-guiados" class="section active">
+            <div class="container">
+                <div class="section-header">
+                    <h2><i class="fas fa-graduation-cap"></i> Ejercicios Guiados</h2>
+                    <p>Actividades desarrolladas con asistencia y guía durante las clases</p>
+                </div>
+                <div class="projects-grid">
+                    <!-- Cloud Models Classifier -->
+                    <div class="project-card" data-project="cloud-models">
+                        <div class="card-header">
+                            <h3>Cloud Models Classifier</h3>
+                            <div class="card-tags">
+                                <span class="tag python">Python</span>
+                                <span class="tag ai">IA</span>
+                                <span class="tag cloud">Cloud</span>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <p>Clasificador de servicios en la nube que determina si un texto corresponde a IaaS, PaaS, SaaS o FaaS usando reglas básicas y análisis de palabras clave.</p>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn-primary" onclick="openProjectModal('cloud-models')">
+                                <i class="fas fa-eye"></i> Ver Detalles
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Chatbot con Ollama -->
+                    <div class="project-card" data-project="chatbot">
+                        <div class="card-header">
+                            <h3>Chatbot con Ollama</h3>
+                            <div class="card-tags">
+                                <span class="tag python">Python</span>
+                                <span class="tag web">Flask</span>
+                                <span class="tag ai">Ollama</span>
+                                <span class="tag docker">Docker</span>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <p>Aplicación web interactiva que se conecta con modelos de lenguaje local (Ollama) a través de una API REST, permitiendo conversaciones en tiempo real con IA.</p>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn-primary" onclick="openProjectModal('chatbot')">
+                                <i class="fas fa-eye"></i> Ver Detalles
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Ejercicio XML -->
+                    <div class="project-card" data-project="xml-exercise">
+                        <div class="card-header">
+                            <h3>Catálogo de Libros XML</h3>
+                            <div class="card-tags">
+                                <span class="tag xml">XML</span>
+                                <span class="tag xsl">XSL</span>
+                                <span class="tag css">CSS</span>
+                                <span class="tag html">HTML</span>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <p>Sistema de gestión de biblioteca digital que utiliza XML como base de datos, XSL para transformaciones y CSS para estilización. Incluye búsqueda por ISBN y visualización dinámica.</p>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn-primary" onclick="openProjectModal('xml-exercise')">
+                                <i class="fas fa-eye"></i> Ver Detalles
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Microservicios -->
+                    <div class="project-card" data-project="microservices">
+                        <div class="card-header">
+                            <h3>Microservicio Flask con MariaDB</h3>
+                            <div class="card-tags">
+                                <span class="tag python">Python</span>
+                                <span class="tag web">Flask</span>
+                                <span class="tag database">MariaDB</span>
+                                <span class="tag api">API REST</span>
+                                <span class="tag gcp">GCP</span>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <p>Microservicio completo desarrollado en Flask con base de datos MariaDB normalizada, API REST con 7 endpoints CRUD, respuestas XML y despliegue en Google Cloud Platform.</p>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn-primary" onclick="openProjectModal('microservices')">
+                                <i class="fas fa-eye"></i> Ver Detalles
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Placeholder para futuros ejercicios -->
+                    <div class="project-card placeholder">
+                        <div class="placeholder-content">
+                            <i class="fas fa-plus"></i>
+                            <p>Más ejercicios próximamente...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Ejercicios en Casa Section -->
+        <section id="ejercicios-casa" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h2><i class="fas fa-home"></i> Ejercicios en Casa</h2>
+                    <p>Tareas y proyectos desarrollados de forma independiente</p>
+                </div>
+                <div class="projects-grid">
+                    <!-- Tarea 1: Mapa Conceptual Comparativo -->
+                    <div class="project-card tarea-special" data-project="tarea-1">
+                        <div class="card-header">
+                            <h3><i class="fas fa-project-diagram"></i> Mapa Conceptual Comparativo</h3>
+                            <div class="card-tags">
+                                <span class="tag analysis">Análisis</span>
+                                <span class="tag cloud">Cloud Models</span>
+                                <span class="tag comparison">Comparación</span>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <div class="tarea-description">
+                                <p><strong>Objetivo:</strong> Crear un mapa mental que contraste los modelos IaaS, PaaS, SaaS y FaaS con ejemplos reales de proveedores de nube.</p>
+                                <p><strong>Herramientas:</strong> Miro o Lucidchart para diagramación</p>
+                            </div>
+                            <div class="document-preview">
+                                <div class="pdf-container">
+                                    <div class="pdf-icon">
+                                        <i class="fas fa-file-pdf"></i>
+                                    </div>
+                                    <div class="pdf-info">
+                                        <h4>Tarea_1.pdf</h4>
+                                        <p>Mapa Conceptual Comparativo de Modelos Cloud</p>
+                                        <button class="btn-download" onclick="openProjectModal('tarea-1')">
+                                            <i class="fas fa-download"></i> Ver PDF Completo
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tarea 2: Miniensayo Cloud-native vs Cloud-enabled -->
+                    <div class="project-card tarea-special" data-project="tarea-2">
+                        <div class="card-header">
+                            <h3><i class="fas fa-file-alt"></i> Miniensayo: Cloud-native vs Cloud-enabled</h3>
+                            <div class="card-tags">
+                                <span class="tag research">Investigación</span>
+                                <span class="tag writing">Escritura</span>
+                                <span class="tag analysis">Análisis</span>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <div class="tarea-description">
+                                <p><strong>Tema:</strong> "¿Cloud-native o Cloud-enabled? Análisis de una app real."</p>
+                                <p><strong>Extensión:</strong> 600 palabras con referencias bibliográficas actuales (IEEE, ACM, blogs técnicos confiables)</p>
+                            </div>
+                            <div class="essay-preview">
+                                <div class="essay-content">
+                                    <h4>Resumen del Ensayo</h4>
+                                    <div class="essay-excerpt">
+                                        <p>Cuando una empresa decide mover una aplicación a la nube, aparece una duda muy común: ¿vale la pena hacerla cloud-native desde cero o simplemente adaptarla para que funcione en la nube, lo que se conoce como cloud-enabled?</p>
+                                        <p>Una aplicación cloud-native es aquella que se diseña pensando en la nube desde el principio. No es un sistema que se toma y se "sube" como está, sino que nace con una arquitectura moderna: microservicios, contenedores como Docker, orquestadores como Kubernetes...</p>
+                                    </div>
+                                    <div class="essay-stats">
+                                        <div class="stat-item">
+                                            <i class="fas fa-file-word"></i>
+                                            <span>600+ palabras</span>
+                                        </div>
+                                        <div class="stat-item">
+                                            <i class="fas fa-book"></i>
+                                            <span>5 referencias</span>
+                                        </div>
+                                        <div class="stat-item">
+                                            <i class="fas fa-chart-line"></i>
+                                            <span>Análisis profundo</span>
+                                        </div>
+                                    </div>
+                                    <button class="btn-read-full" onclick="openProjectModal('tarea-2')">
+                                        <i class="fas fa-book-open"></i> Leer Ensayo Completo
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tarea 3: Arquitectura Cloud para Banca Móvil -->
+                    <div class="project-card tarea-special" data-project="tarea-3">
+                        <div class="card-header">
+                            <h3><i class="fas fa-cloud"></i> Arquitectura Cloud para Banca Móvil</h3>
+                            <div class="card-tags">
+                                <span class="tag aws">AWS</span>
+                                <span class="tag serverless">Serverless</span>
+                                <span class="tag terraform">Terraform</span>
+                                <span class="tag python">Python</span>
+                                <span class="tag architecture">Arquitectura</span>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <div class="tarea-description">
+                                <p><strong>Prompt:</strong> "Simula el diseño de una arquitectura cloud para una aplicación de banca móvil usando una nube híbrida y funciones serverless. Muestra el código del backend básico y diagrama arquitectónico."</p>
+                                <p><strong>Entregables:</strong> Código generado, screenshots y reflexión de 500 palabras sobre el uso de IA para crear arquitecturas</p>
+                            </div>
+                            <div class="architecture-preview">
+                                <div class="architecture-content">
+                                    <h4>Arquitectura Híbrida Implementada</h4>
+                                    <div class="architecture-diagram">
+                                        <div class="cloud-layer">
+                                            <div class="layer-title">☁️ Nube Pública (AWS)</div>
+                                            <div class="services-grid">
+                                                <div class="service-item">
+                                                    <i class="fas fa-server"></i>
+                                                    <span>Lambda Functions</span>
+                                                </div>
+                                                <div class="service-item">
+                                                    <i class="fas fa-database"></i>
+                                                    <span>DynamoDB</span>
+                                                </div>
+                                                <div class="service-item">
+                                                    <i class="fas fa-shield-alt"></i>
+                                                    <span>Cognito</span>
+                                                </div>
+                                                <div class="service-item">
+                                                    <i class="fas fa-gateway"></i>
+                                                    <span>API Gateway</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="cloud-layer">
+                                            <div class="layer-title">🏢 Nube Privada</div>
+                                            <div class="services-grid">
+                                                <div class="service-item">
+                                                    <i class="fas fa-database"></i>
+                                                    <span>Aurora PostgreSQL</span>
+                                                </div>
+                                                <div class="service-item">
+                                                    <i class="fas fa-network-wired"></i>
+                                                    <span>VPC Privada</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="project-stats">
+                                        <div class="stat-item">
+                                            <i class="fas fa-code"></i>
+                                            <span>5+ Funciones Lambda</span>
+                                        </div>
+                                        <div class="stat-item">
+                                            <i class="fas fa-project-diagram"></i>
+                                            <span>Diagramas Mermaid</span>
+                                        </div>
+                                        <div class="stat-item">
+                                            <i class="fas fa-file-alt"></i>
+                                            <span>Documentación Completa</span>
+                                        </div>
+                                        <div class="stat-item">
+                                            <i class="fas fa-brain"></i>
+                                            <span>Reflexión IA</span>
+                                        </div>
+                                    </div>
+                                    <button class="btn-explore-architecture" onclick="openProjectModal('tarea-3')">
+                                        <i class="fas fa-rocket"></i> Explorar Tarea Completa
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Placeholder para futuros ejercicios -->
+                    <div class="project-card placeholder">
+                        <div class="placeholder-content">
+                            <i class="fas fa-plus"></i>
+                            <p>Más ejercicios próximamente...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Proyecto Final Section -->
+        <section id="proyecto-final" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h2><i class="fas fa-trophy"></i> Proyecto Final</h2>
+                    <p>Proyecto integrador que demuestra las competencias adquiridas</p>
+                </div>
+                <div class="projects-grid">
+                    <!-- Proyecto Final -->
+                    <div class="project-card tarea-special" data-project="proyecto-final">
+                        <div class="card-header">
+                            <h3><i class="fas fa-file-alt"></i> Reporte Técnico Proyecto Integración</h3>
+                            <div class="card-tags">
+                                <span class="tag report">Reporte</span>
+                                <span class="tag technical">Técnico</span>
+                                <span class="tag integration">Integración</span>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <div class="tarea-description">
+                                <p><strong>Objetivo:</strong> Reporte técnico completo del proyecto integrador que demuestra las competencias adquiridas en el curso de Integración de Aplicaciones Web.</p>
+                                <p><strong>Contenido:</strong> Documentación técnica detallada del proyecto desarrollado</p>
+                            </div>
+                            <div class="document-preview">
+                                <div class="pdf-container">
+                                    <div class="pdf-icon">
+                                        <i class="fas fa-file-pdf"></i>
+                                    </div>
+                                    <div class="pdf-info">
+                                        <h4>proyectof.pdf</h4>
+                                        <p>Reporte técnico completo del proyecto integrador</p>
+                                        <button class="btn-download" onclick="openProjectModal('proyecto-final')">
+                                            <i class="fas fa-download"></i> Ver PDF Completo
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal -->
+    <div id="project-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title"></h2>
+                <button class="close-btn" onclick="closeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-tabs">
+                    <button class="tab-btn active" data-tab="overview">Descripción</button>
+                    <button class="tab-btn" data-tab="images">Imágenes</button>
+                    <button class="tab-btn" data-tab="code">Código</button>
+                </div>
+                
+                <div class="tab-content active" id="overview">
+                    <div class="overview-content">
+                        <div class="info-section">
+                            <h3>Objetivos</h3>
+                            <p id="objectives"></p>
+                        </div>
+                        <div class="info-section">
+                            <h3>Herramientas</h3>
+                            <p id="tools"></p>
+                        </div>
+                        <div class="info-section">
+                            <h3>Aprendizajes</h3>
+                            <p id="learnings"></p>
+                        </div>
+                        <div class="info-section">
+                            <h3>Conclusión y Reflexión</h3>
+                            <p id="reflection"></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="images">
+                    <div class="images-gallery">
+                        <div id="images-container"></div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="code">
+                    <div class="code-container">
+                        <div class="code-header">
+                            <h3>Archivos de Código</h3>
+                        </div>
+                        <div class="code-files">
+                            <div id="code-container"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

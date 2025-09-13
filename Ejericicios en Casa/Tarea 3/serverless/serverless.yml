@@ -1,0 +1,392 @@
+# Configuración del Serverless Framework para la aplicación de banca móvil
+
+service: banking-app
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: python3.9
+  region: ${opt:region, 'us-east-1'}
+  stage: ${opt:stage, 'dev'}
+  
+  # Configuración de memoria y timeout
+  memorySize: 512
+  timeout: 30
+  
+  # Variables de entorno
+  environment:
+    # Cognito
+    USER_POOL_ID: ${env:USER_POOL_ID}
+    COGNITO_CLIENT_ID: ${env:COGNITO_CLIENT_ID}
+    
+    # DynamoDB Tables
+    USERS_TABLE_NAME: ${env:USERS_TABLE_NAME}
+    ACCOUNTS_TABLE_NAME: ${env:ACCOUNTS_TABLE_NAME}
+    TRANSACTIONS_TABLE_NAME: ${env:TRANSACTIONS_TABLE_NAME}
+    AUDIT_TABLE_NAME: ${env:AUDIT_TABLE_NAME}
+    SESSIONS_TABLE_NAME: ${env:SESSIONS_TABLE_NAME}
+    NOTIFICATIONS_TABLE_NAME: ${env:NOTIFICATIONS_TABLE_NAME}
+    
+    # RDS
+    RDS_CLUSTER_ARN: ${env:RDS_CLUSTER_ARN}
+    RDS_SECRET_ARN: ${env:RDS_SECRET_ARN}
+    RDS_DATABASE_NAME: ${env:RDS_DATABASE_NAME, 'banking'}
+    
+    # SNS Topics
+    VERIFICATION_TOPIC_ARN: ${env:VERIFICATION_TOPIC_ARN}
+    NOTIFICATIONS_TOPIC_ARN: ${env:NOTIFICATIONS_TOPIC_ARN}
+    
+    # SQS Queues
+    TRANSACTION_QUEUE_URL: ${env:TRANSACTION_QUEUE_URL}
+    
+    # S3 Buckets
+    DOCUMENTS_BUCKET: ${env:DOCUMENTS_BUCKET}
+    
+    # KMS
+    KMS_KEY_ID: ${env:KMS_KEY_ID}
+    
+    # Environment
+    ENVIRONMENT: ${self:provider.stage}
+    PROJECT_NAME: banking-app
+  
+  # Configuración de IAM
+  iam:
+    role:
+      statements:
+        # DynamoDB permissions
+        - Effect: Allow
+          Action:
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:BatchGetItem
+            - dynamodb:BatchWriteItem
+          Resource:
+            - "arn:aws:dynamodb:${self:provider.region}:*:table/${env:USERS_TABLE_NAME}"
+            - "arn:aws:dynamodb:${self:provider.region}:*:table/${env:ACCOUNTS_TABLE_NAME}"
+            - "arn:aws:dynamodb:${self:provider.region}:*:table/${env:TRANSACTIONS_TABLE_NAME}"
+            - "arn:aws:dynamodb:${self:provider.region}:*:table/${env:AUDIT_TABLE_NAME}"
+            - "arn:aws:dynamodb:${self:provider.region}:*:table/${env:SESSIONS_TABLE_NAME}"
+            - "arn:aws:dynamodb:${self:provider.region}:*:table/${env:NOTIFICATIONS_TABLE_NAME}"
+            - "arn:aws:dynamodb:${self:provider.region}:*:table/${env:USERS_TABLE_NAME}/index/*"
+            - "arn:aws:dynamodb:${self:provider.region}:*:table/${env:ACCOUNTS_TABLE_NAME}/index/*"
+            - "arn:aws:dynamodb:${self:provider.region}:*:table/${env:TRANSACTIONS_TABLE_NAME}/index/*"
+            - "arn:aws:dynamodb:${self:provider.region}:*:table/${env:AUDIT_TABLE_NAME}/index/*"
+        
+        # RDS Data API permissions
+        - Effect: Allow
+          Action:
+            - rds-data:ExecuteStatement
+            - rds-data:BatchExecuteStatement
+            - rds-data:BeginTransaction
+            - rds-data:CommitTransaction
+            - rds-data:RollbackTransaction
+          Resource: ${env:RDS_CLUSTER_ARN}
+        
+        # Secrets Manager permissions
+        - Effect: Allow
+          Action:
+            - secretsmanager:GetSecretValue
+            - secretsmanager:DescribeSecret
+          Resource: ${env:RDS_SECRET_ARN}
+        
+        # Cognito permissions
+        - Effect: Allow
+          Action:
+            - cognito-idp:AdminInitiateAuth
+            - cognito-idp:AdminCreateUser
+            - cognito-idp:AdminSetUserPassword
+            - cognito-idp:AdminGetUser
+            - cognito-idp:AdminUpdateUserAttributes
+            - cognito-idp:AdminDeleteUser
+            - cognito-idp:ListUsers
+            - cognito-idp:AdminListGroupsForUser
+            - cognito-idp:AdminAddUserToGroup
+            - cognito-idp:AdminRemoveUserFromGroup
+          Resource:
+            - "arn:aws:cognito-idp:${self:provider.region}:*:userpool/${env:USER_POOL_ID}"
+        
+        # SNS permissions
+        - Effect: Allow
+          Action:
+            - sns:Publish
+            - sns:GetTopicAttributes
+          Resource:
+            - ${env:VERIFICATION_TOPIC_ARN}
+            - ${env:NOTIFICATIONS_TOPIC_ARN}
+        
+        # SQS permissions
+        - Effect: Allow
+          Action:
+            - sqs:SendMessage
+            - sqs:GetQueueAttributes
+            - sqs:ReceiveMessage
+            - sqs:DeleteMessage
+          Resource: ${env:TRANSACTION_QUEUE_URL}
+        
+        # S3 permissions
+        - Effect: Allow
+          Action:
+            - s3:GetObject
+            - s3:PutObject
+            - s3:DeleteObject
+            - s3:GetObjectVersion
+          Resource:
+            - "arn:aws:s3:::${env:DOCUMENTS_BUCKET}/*"
+        
+        # KMS permissions
+        - Effect: Allow
+          Action:
+            - kms:Encrypt
+            - kms:Decrypt
+            - kms:ReEncrypt*
+            - kms:GenerateDataKey*
+            - kms:DescribeKey
+          Resource: ${env:KMS_KEY_ID}
+        
+        # CloudWatch Logs permissions
+        - Effect: Allow
+          Action:
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+            - logs:DescribeLogGroups
+            - logs:DescribeLogStreams
+          Resource:
+            - "arn:aws:logs:${self:provider.region}:*:log-group:/aws/lambda/${self:service}-${self:provider.stage}-*"
+        
+        # X-Ray permissions
+        - Effect: Allow
+          Action:
+            - xray:PutTraceSegments
+            - xray:PutTelemetryRecords
+          Resource: "*"
+
+# Configuración de funciones Lambda
+functions:
+  # Funciones de Autenticación
+  authLogin:
+    handler: functions/auth/login.lambda_handler
+    description: "Autenticación de usuarios"
+    events:
+      - http:
+          path: /auth/login
+          method: post
+          cors: true
+          authorizer: aws_iam
+    environment:
+      FUNCTION_NAME: auth-login
+    tags:
+      Service: Authentication
+      Function: Login
+  
+  authRegister:
+    handler: functions/auth/register.lambda_handler
+    description: "Registro de nuevos usuarios"
+    events:
+      - http:
+          path: /auth/register
+          method: post
+          cors: true
+    environment:
+      FUNCTION_NAME: auth-register
+    tags:
+      Service: Authentication
+      Function: Register
+  
+  authRefreshToken:
+    handler: functions/auth/login.refresh_token_handler
+    description: "Renovación de tokens de acceso"
+    events:
+      - http:
+          path: /auth/refresh
+          method: post
+          cors: true
+          authorizer: aws_iam
+    environment:
+      FUNCTION_NAME: auth-refresh-token
+    tags:
+      Service: Authentication
+      Function: RefreshToken
+  
+  # Funciones de Cuentas
+  getBalance:
+    handler: functions/accounts/get_balance.lambda_handler
+    description: "Obtener balance de una cuenta"
+    events:
+      - http:
+          path: /accounts/{account_id}/balance
+          method: get
+          cors: true
+          authorizer: aws_iam
+    environment:
+      FUNCTION_NAME: get-balance
+    tags:
+      Service: Accounts
+      Function: GetBalance
+  
+  getAllAccounts:
+    handler: functions/accounts/get_balance.get_all_accounts_handler
+    description: "Obtener todas las cuentas del usuario"
+    events:
+      - http:
+          path: /accounts
+          method: get
+          cors: true
+          authorizer: aws_iam
+    environment:
+      FUNCTION_NAME: get-all-accounts
+    tags:
+      Service: Accounts
+      Function: GetAllAccounts
+  
+  # Funciones de Transacciones
+  transfer:
+    handler: functions/transactions/transfer.lambda_handler
+    description: "Realizar transferencias entre cuentas"
+    events:
+      - http:
+          path: /transactions/transfer
+          method: post
+          cors: true
+          authorizer: aws_iam
+    environment:
+      FUNCTION_NAME: transfer
+    tags:
+      Service: Transactions
+      Function: Transfer
+  
+  getTransactions:
+    handler: functions/transactions/get_transactions.lambda_handler
+    description: "Obtener historial de transacciones"
+    events:
+      - http:
+          path: /transactions
+          method: get
+          cors: true
+          authorizer: aws_iam
+    environment:
+      FUNCTION_NAME: get-transactions
+    tags:
+      Service: Transactions
+      Function: GetTransactions
+  
+  getTransactionById:
+    handler: functions/transactions/get_transactions.get_transaction_by_id_handler
+    description: "Obtener transacción específica por ID"
+    events:
+      - http:
+          path: /transactions/{transaction_id}
+          method: get
+          cors: true
+          authorizer: aws_iam
+    environment:
+      FUNCTION_NAME: get-transaction-by-id
+    tags:
+      Service: Transactions
+      Function: GetTransactionById
+  
+  getTransactionSummary:
+    handler: functions/transactions/get_transactions.get_transaction_summary_handler
+    description: "Obtener resumen de transacciones"
+    events:
+      - http:
+          path: /transactions/summary
+          method: get
+          cors: true
+          authorizer: aws_iam
+    environment:
+      FUNCTION_NAME: get-transaction-summary
+    tags:
+      Service: Transactions
+      Function: GetTransactionSummary
+
+# Configuración de plugins
+plugins:
+  - serverless-python-requirements
+  - serverless-offline
+
+# Configuración de Python requirements
+custom:
+  pythonRequirements:
+    dockerizePip: true
+    pipCmdExtraArgs:
+      - --no-cache-dir
+    slim: true
+    strip: false
+    layer:
+      name: ${self:service}-${self:provider.stage}-dependencies
+      description: Dependencies for ${self:service} ${self:provider.stage}
+      compatibleRuntimes:
+        - python3.9
+      retain: false
+
+# Configuración de recursos adicionales
+resources:
+  Resources:
+    # CloudWatch Log Groups
+    AuthLoginLogGroup:
+      Type: AWS::Logs::LogGroup
+      Properties:
+        LogGroupName: /aws/lambda/${self:service}-${self:provider.stage}-auth-login
+        RetentionInDays: 30
+    
+    AuthRegisterLogGroup:
+      Type: AWS::Logs::LogGroup
+      Properties:
+        LogGroupName: /aws/lambda/${self:service}-${self:provider.stage}-auth-register
+        RetentionInDays: 30
+    
+    GetBalanceLogGroup:
+      Type: AWS::Logs::LogGroup
+      Properties:
+        LogGroupName: /aws/lambda/${self:service}-${self:provider.stage}-get-balance
+        RetentionInDays: 30
+    
+    TransferLogGroup:
+      Type: AWS::Logs::LogGroup
+      Properties:
+        LogGroupName: /aws/lambda/${self:service}-${self:provider.stage}-transfer
+        RetentionInDays: 30
+    
+    GetTransactionsLogGroup:
+      Type: AWS::Logs::LogGroup
+      Properties:
+        LogGroupName: /aws/lambda/${self:service}-${self:provider.stage}-get-transactions
+        RetentionInDays: 30
+
+# Configuración de outputs
+outputs:
+  ApiGatewayRestApiId:
+    Description: "API Gateway REST API ID"
+    Value:
+      Ref: ApiGatewayRestApi
+    Export:
+      Name: ${self:service}-${self:provider.stage}-api-gateway-id
+  
+  ApiGatewayRestApiRootResourceId:
+    Description: "API Gateway REST API Root Resource ID"
+    Value:
+      Fn::GetAtt:
+        - ApiGatewayRestApi
+        - RootResourceId
+    Export:
+      Name: ${self:service}-${self:provider.stage}-api-gateway-root-resource-id
+  
+  ApiGatewayRestApiUrl:
+    Description: "API Gateway REST API URL"
+    Value:
+      Fn::Join:
+        - ""
+        - - "https://"
+          - Ref: ApiGatewayRestApi
+          - ".execute-api."
+          - ${self:provider.region}
+          - ".amazonaws.com/"
+          - ${self:provider.stage}
+    Export:
+      Name: ${self:service}-${self:provider.stage}-api-gateway-url

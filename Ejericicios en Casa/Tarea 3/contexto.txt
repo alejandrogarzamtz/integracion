@@ -1,0 +1,6 @@
+Tarea 3: Ejercicio en Cursor con Prompt Engineering
+● Prompt sugerido: "Simula el diseño de una arquitectura cloud para una aplicación de banca móvil
+usando una nube híbrida y funciones serverless. Muestra el código del backend básico y diagrama
+arquitectónico."
+● Anexar el código generado, screenshots y una reflexión de 500 palabras sobre el uso de la IA para
+crear la arquitectura.

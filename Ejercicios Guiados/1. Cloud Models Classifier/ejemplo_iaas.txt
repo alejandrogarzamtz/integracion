@@ -1,0 +1,1 @@
+Necesito servidores virtuales con alta capacidad de computo, almacenamiento SSD y configuración de red personalizada. Requiero instancias con CPU dedicada, RAM amplia y la capacidad de escalar horizontalmente según la demanda. También necesito balanceadores de carga, firewalls y configuración de VPC para asegurar la infraestructura.

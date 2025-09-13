@@ -1,0 +1,15 @@
+Introducción
+
+En la actualidad, la gestión de información digital es fundamental para organizar y acceder de manera eficiente a grandes volúmenes de datos. Una de las formas más simples pero efectivas de hacerlo es mediante el uso de XML (Extensible Markup Language), un lenguaje que permite estructurar datos de forma jerárquica y legible tanto para humanos como para máquinas. Complementando a XML, se emplea XSL (Extensible Stylesheet Language) para transformar esos datos y presentarlos en un formato comprensible para el usuario. En este proyecto, el objetivo principal es construir una biblioteca digital en la que se almacenen datos de libros (como título, autor, género, precio e ISBN), utilizando XML como base de datos y XSL para generar visualizaciones dinámicas, junto con un apoyo opcional de CSS para dar estilo.
+
+Desarrollo
+
+El punto de partida es el archivo XML, que funciona como un contenedor estructurado de información. Cada libro se representa dentro de etiquetas <book>, con atributos como isbn y elementos hijos que definen título, autor, año, género, precio y formato. Esta estructura garantiza un almacenamiento ordenado, independiente del diseño visual, lo que permite concentrarse únicamente en los datos.
+
+Para que esta información no se quede en un simple listado de etiquetas, se utiliza XSL, cuyo propósito es transformar el contenido del XML en un formato más útil, como páginas web en HTML o tablas interactivas. A través de plantillas (<xsl:template>) y expresiones XPath, se puede filtrar, ordenar y mostrar únicamente la información deseada. Por ejemplo, se puede implementar una búsqueda que localice un libro específico a partir de su ISBN, generando automáticamente una vista con sus detalles. De esta manera, XSL funciona como el puente entre los datos crudos y la presentación final.
+
+Finalmente, para mejorar la experiencia visual, se integra CSS. Aunque no es el núcleo del proyecto, el CSS permite darle identidad a la biblioteca digital, ya sea con un estilo minimalista, clásico o incluso con temáticas más llamativas como un diseño “cyberpunk”. El CSS no altera la lógica ni el contenido, pero aporta una capa estética que facilita la lectura y la interacción del usuario con la biblioteca.
+
+Conclusión
+
+La construcción de una biblioteca digital con XML y XSL demuestra cómo tecnologías relativamente simples pueden resolver problemas prácticos de organización y presentación de información. XML asegura un almacenamiento ordenado y estandarizado, mientras que XSL ofrece la flexibilidad de transformar y mostrar los datos según las necesidades del usuario, como en búsquedas por ISBN o listados temáticos. CSS, por su parte, complementa al dotar de un aspecto visual atractivo y funcional. En conjunto, estas herramientas permiten diseñar soluciones ligeras, portables y fáciles de mantener, que cumplen con el objetivo de organizar y dar acceso a información de manera eficiente.

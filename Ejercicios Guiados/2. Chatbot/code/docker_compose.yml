@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+  flask-app:
+    build: .
+    container_name: flask_service
+    ports:
+      - "5000:5000"
+    environment:
+      FLASK_ENV: development
+    depends_on:
+      - ollama
+    restart: always   
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama_service
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_storage:/root/.ollama
+    restart: always   
+
+volumes:
+  ollama_storage:

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Catálogo de Libros</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; background: #f9f9f9; }
+    h1 { color: #333; }
+    .section { margin-bottom: 20px; padding: 15px; border: 1px solid #ccc; background: #fff; border-radius: 8px; }
+    label { display: block; margin-top: 5px; }
+    input { margin-bottom: 10px; padding: 5px; width: 300px; }
+    button { margin: 5px; padding: 8px; cursor: pointer; }
+    .result { margin-top: 10px; background: #eef; padding: 10px; border-radius: 5px; }
+    ul { list-style: none; padding-left: 0; }
+    li { margin-bottom: 8px; padding: 6px; background: #fdfdfd; border: 1px solid #ddd; border-radius: 5px; }
+    strong { color: #2c3e50; }
+  </style>
+</head>
+<body>
+  <h1>📚 Catálogo de Libros</h1>
+
+  <!-- 1. Mostrar todos -->
+  <div class="section">
+    <h2>Mostrar todos los libros</h2>
+    <button onclick="getAllBooks()">Mostrar</button>
+    <div id="resultAll" class="result"></div>
+  </div>
+
+  <!-- 2. Buscar ISBN -->
+  <div class="section">
+    <h2>Buscar libro por ISBN</h2>
+    <input type="text" id="isbnSearch" placeholder="Ej: 1234567890">
+    <button onclick="getBookByIsbn()">Buscar</button>
+    <div id="resultIsbn" class="result"></div>
+  </div>
+
+  <!-- 3. Buscar por formato -->
+  <div class="section">
+    <h2>Buscar libros por formato</h2>
+    <input type="text" id="formatSearch" placeholder="Ej: PDF, Impreso, ePub">
+    <button onclick="getBooksByFormat()">Buscar</button>
+    <div id="resultFormat" class="result"></div>
+  </div>
+
+  <!-- 4. Buscar por autor -->
+  <div class="section">
+    <h2>Buscar libros por autor</h2>
+    <input type="text" id="authorSearch" placeholder="Ej: Gabriel García Márquez">
+    <button onclick="getBooksByAuthor()">Buscar</button>
+    <div id="resultAuthor" class="result"></div>
+  </div>
+
+  <!-- 5. Crear libro -->
+  <div class="section">
+    <h2>Crear nuevo libro</h2>
+    <label>ISBN</label><input id="createIsbn">
+    <label>Título</label><input id="createTitle">
+    <label>Autores (coma separados)</label><input id="createAuthors">
+    <label>Año</label><input id="createYear">
+    <label>Género</label><input id="createGenre">
+    <label>Precio</label><input id="createPrice">
+    <label>Stock</label><input id="createStock">
+    <label>Formato</label><input id="createFormat">
+    <button onclick="createBook()">Crear</button>
+    <div id="resultCreate" class="result"></div>
+  </div>
+
+  <!-- 6. Actualizar libro -->
+  <div class="section">
+    <h2>Actualizar libro</h2>
+    <label>ISBN (requerido)</label><input id="updateIsbn">
+    <label>Título</label><input id="updateTitle">
+    <label>Autores</label><input id="updateAuthors">
+    <label>Año</label><input id="updateYear">
+    <label>Género</label><input id="updateGenre">
+    <label>Precio</label><input id="updatePrice">
+    <label>Stock</label><input id="updateStock">
+    <label>Formato</label><input id="updateFormat">
+    <button onclick="updateBook()">Actualizar</button>
+    <div id="resultUpdate" class="result"></div>
+  </div>
+
+  <!-- 7. Eliminar libro -->
+  <div class="section">
+    <h2>Eliminar libro</h2>
+    <input type="text" id="deleteIsbn" placeholder="ISBN del libro a eliminar">
+    <button onclick="deleteBook()">Eliminar</button>
+    <div id="resultDelete" class="result"></div>
+  </div>
+
+  <script>
+    function renderBooks(xmlText) {
+      const parser = new DOMParser();
+      const xml = parser.parseFromString(xmlText, "application/xml");
+      const books = xml.getElementsByTagName("book");
+
+      if (books.length === 0) {
+        return "<p>No se encontraron libros.</p>";
+      }
+
+      let html = "<ul>";
+      for (let book of books) {
+        const title = book.getElementsByTagName("title")[0]?.textContent || "";
+        const author = book.getElementsByTagName("author")[0]?.textContent || "";
+        const year = book.getElementsByTagName("year")[0]?.textContent || "";
+        const genre = book.getElementsByTagName("genre")[0]?.textContent || "";
+        const price = book.getElementsByTagName("price")[0]?.textContent || "";
+        const stock = book.getElementsByTagName("stock")[0]?.textContent || "";
+        const format = book.getElementsByTagName("format")[0]?.textContent || "";
+        const isbn = book.getAttribute("isbn");
+
+        html += `<li>
+          <strong>${title}</strong> — ${author}  
+          <br><em>Año:</em> ${year}, <em>Género:</em> ${genre}, <em>Precio:</em> $${price}, <em>Stock:</em> ${stock}, <em>Formato:</em> ${format}, <em>ISBN:</em> ${isbn}
+        </li>`;
+      }
+      html += "</ul>";
+      return html;
+    }
+
+    async function getAllBooks() {
+      const res = await fetch('/api/books');
+      document.getElementById('resultAll').innerHTML = renderBooks(await res.text());
+    }
+
+    async function getBookByIsbn() {
+      const isbn = document.getElementById('isbnSearch').value;
+      const res = await fetch(`/api/books/${isbn}`);
+      document.getElementById('resultIsbn').innerHTML = renderBooks(await res.text());
+    }
+
+    async function getBooksByFormat() {
+      const format = document.getElementById('formatSearch').value;
+      const res = await fetch(`/api/books/format?format=${format}`);
+      document.getElementById('resultFormat').innerHTML = renderBooks(await res.text());
+    }
+
+    async function getBooksByAuthor() {
+      const author = document.getElementById('authorSearch').value;
+      const res = await fetch(`/api/books/author?author=${author}`);
+      document.getElementById('resultAuthor').innerHTML = renderBooks(await res.text());
+    }
+
+    async function createBook() {
+      const data = {
+        isbn: document.getElementById('createIsbn').value,
+        title: document.getElementById('createTitle').value,
+        authors: document.getElementById('createAuthors').value,
+        year: document.getElementById('createYear').value,
+        genre: document.getElementById('createGenre').value,
+        price: document.getElementById('createPrice').value,
+        stock: document.getElementById('createStock').value,
+        format: document.getElementById('createFormat').value
+      };
+      const res = await fetch('/api/books/create', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+      });
+      document.getElementById('resultCreate').innerHTML = await res.text();
+    }
+
+    async function updateBook() {
+      const data = {
+        isbn: document.getElementById('updateIsbn').value,
+        title: document.getElementById('updateTitle').value,
+        authors: document.getElementById('updateAuthors').value,
+        year: document.getElementById('updateYear').value,
+        genre: document.getElementById('updateGenre').value,
+        price: document.getElementById('updatePrice').value,
+        stock: document.getElementById('updateStock').value,
+        format: document.getElementById('updateFormat').value
+      };
+      const res = await fetch('/api/books/update', {
+        method: 'PUT',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+      });
+      document.getElementById('resultUpdate').innerHTML = await res.text();
+    }
+
+    async function deleteBook() {
+      const data = { isbn: document.getElementById('deleteIsbn').value };
+      const res = await fetch('/api/books/delete', {
+        method: 'DELETE',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+      });
+      document.getElementById('resultDelete').innerHTML = await res.text();
+    }
+  </script>
+</body>
+</html>

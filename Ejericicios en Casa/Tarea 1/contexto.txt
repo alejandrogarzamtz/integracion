@@ -1,0 +1,5 @@
+
+SUBE EL PDF
+Tarea 1: Mapa Conceptual Comparativo
+● Usa Miro o Lucidchart para crear un mapa mental que contraste los modelos IaaS, PaaS, SaaS y FaaS
+con ejemplos reales de proveedores de nube.

@@ -1,0 +1,17 @@
+
+SUBE EL CODIGO QUE ESTAN EN LAS SUBCARPETAS DE code
+SUBE LAS FOTOS QUE ESTAN EN media
+SUBE LA REFLEXIÓN QUE ESTA EN resume, es un txt
+
+CONTEXTO:
+1. Abre Cursor y crea un proyecto llamado cloud_models_classifier. 2. Usa el prompt: "Genera un código en Python que reciba un texto y clasifique si
+corresponde a IaaS, PaaS, SaaS o FaaS usando reglas básicas." 3. Mejora el código con ayuda del asistente de IA:
+a. Añade validación de entrada.
+b. Usa una función para cada clasificación.
+c. Prueba con al menos 5 ejemplos distintos.
+4. Integra argparse para ejecutar el clasificador por línea de comandos.
+5. Desarrolla un sitio web personal que tenga una sección de reportes para los ejercicios
+guiados.
+a. Anexar el código generado, screenshots del funcionamiento de este ejercicio y
+una reflexión de 300 palabras sobre el uso de la IA para crear la arquitectura y
+tu impresión como ITC al hacer esto.

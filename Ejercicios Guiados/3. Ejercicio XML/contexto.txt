@@ -1,0 +1,32 @@
+sube todos los codigos dentro de la subcarpeta codesube el comando clave, es un txt
+sube las imagenes de media
+sube la redlexion del resume, es un txt
+
+CONTEXTO:
+Como encargado de gestionar una librería en línea, necesitas mejorar la presentación visual de tu
+archivo XML que contiene la lista de libros. Para ello, deberás crear un archivo CSS llamado
+library.css y vincularlo a tu XML utilizando la directiva <?xml-stylesheet?>. <?xmlstylesheet type="text/css" href="library.css"?>
+El CSS debe cumplir con los siguientes requisitos:
+Estilizar el contenedor principal (library):
+● Debe ocupar el 100% del ancho disponible.
+● Debe tener un padding de 20px.
+● El fondo debe ser de color #f0f0f0.
+● Se debe utilizar la fuente Verdana, Geneva,
+Arial, Helvetica, sans-serif.
+Estilizar la caja que contiene todos los libros
+(books):
+● Debe ocupar el 100% del ancho disponible.
+● El fondo debe ser de color #cccccc.
+● Debe tener un padding de 15px.
+● Debe tener un margen inferior de 20px.
+Estilizar cada libro individual (book):
+● Debe ocupar el 100% del ancho disponible.
+● El fondo debe ser de color #e0e0e0.
+● Debe tener un borde de 1px sólido de color #999.
+● Debe tener un padding de 10px.
+● Debe tener un margen inferior de 10px.
+Estilizar los elementos dentro de cada libro: ● Título (title): Debe tener un tamaño de fuente de 1.2em,
+estar en negrita, y tener un margen inferior de 5px. ● Autor (author): Debe estar en cursiva y tener un margen
+inferior de 5px. ● Género (genre), Precio (price), Stock (stock),
+Formato (format): Deben tener un margen inferior de 3px
+y ser mostrados en bloques. ● Colores específicos: ○ Género: color #666. ○ Precio: color #009900. ○ Stock: color #ff0000. ○ Formato: color #0000ff.
